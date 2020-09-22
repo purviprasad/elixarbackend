@@ -1,0 +1,1 @@
+web: gunicorn elixarbackend.wsgi --log-file -
