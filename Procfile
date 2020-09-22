@@ -1,1 +1,1 @@
-web: gunicorn elixarbackend.wsgi --log-file -
+web: gunicorn elixirbackend.wsgi --log-file -
