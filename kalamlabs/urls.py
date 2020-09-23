@@ -8,5 +8,6 @@ router.register('register',views.Register,basename='register')
 
 urlpatterns = [
     path('payment/',views.payment),
+    path('verify_signature/',views.verifySignature),
     path('',include(router.urls))
 ]

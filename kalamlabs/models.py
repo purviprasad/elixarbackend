@@ -17,6 +17,7 @@ class KalamRegistration(models.Model):
     payment = models.BooleanField(default=False)
     payment_amount = models.CharField(max_length=10,default=0)
     payment_id = models.CharField(max_length=255,default='',unique=True)
+    signature = models.CharField(max_length=255,default='',unique=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name','school','mobile','payment','payment_id']
 

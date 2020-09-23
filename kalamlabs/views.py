@@ -70,7 +70,24 @@ def payment(request):
         amount = data['amount']
         client = razorpay.Client(auth=("rzp_test_L3hv3powYQMGQn", "5QNSr9dG4LPu4IZ7c7rpnUM0"))
         order_id = client.order.create({'amount': amount, 'currency': 'INR', 'payment_capture': '1'})
-    return Response({"name": name,"order_id":order_id['id']})
+    return Response({"name": name,"order_id":order_id['id']})\
+
+
+
+@csrf_exempt
+@api_view(['GET', 'POST'])
+def verifySignature(request):
+    if (request.method == "POST"):
+        data = request.data
+        client = razorpay.Client(auth=("rzp_test_L3hv3powYQMGQn", "5QNSr9dG4LPu4IZ7c7rpnUM0"))
+        params_dict = {
+            'razorpay_order_id': data['order_id'],
+            'razorpay_payment_id': data['payment_id'],
+            'razorpay_signature': data['signature']
+        }
+
+        client.utility.verify_payment_signature(params_dict)
+    return Response({"message":True})
 
 
 
