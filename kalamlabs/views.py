@@ -17,13 +17,9 @@ class Register(viewsets.ModelViewSet):
     serializer_class = serializers.KalamRegistrationSerializer
     queryset = models.KalamRegistration.objects
 
-    def list(self,request):
-
-        return Response({'message':'hey i am working'})
 
     def create(self,request):
         data = request.data
-        print(data)
         serializer = self.serializer_class(data=data)
 
         if serializer.is_valid(raise_exception=True):
@@ -36,30 +32,19 @@ class Register(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-    def update(self,request,pk=None):
-        data = request.data
-        name = data["name"]
-        amount = data["amount"]
-        client = razorpay.client(auth=("rzp_test_L3hv3powYQMGQn", "5QNSr9dG4LPu4IZ7c7rpnUM0"))
-        payment = client.order.create({'amount': amount, 'currency': 'INR', 'payment_capture': '1'})
-        print(data,pk)
-        obj = self.queryset.get(pk=pk)
-        obj.payment_amount=data['amount']
-        obj.payment=True
-        obj.save()
-        return Response({'date': data['date'],'slot':data['slot']})
 
 
-    def retrieve(self,request,pk=None):
-        return Response({'http':'get'})
+class BookTrial(viewsets.ModelViewSet):
+    serializer_class = serializers.BookFreeTrialSerializer
+    queryset = models.BookAFreeTrial.objects
 
+    def create(self,request):
+        data = request.data['register']
+        serializer = self.serializer_class(data=data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+        return Response({'message': True})
 
-
-    def partial_update(self,request,pk=None):
-        return Response({'http':'partial'})
-
-    def destroy(self,request,pk=None):
-        return Response({'http':'remove'})
 
 @csrf_exempt
 @api_view(['GET', 'POST'])

@@ -23,3 +23,15 @@ class KalamRegistration(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class BookAFreeTrial(models.Model):
+    email = models.EmailField(max_length=25, unique=True, default='NA')
+    school = models.CharField(max_length=25, default='unknown')
+    name = models.CharField(max_length=255, default='anonymous')
+    slot = models.CharField(max_length=100, default='00:00')
+    date = models.CharField(max_length=100, default='000000')
+    mobile = models.CharField(max_length=10, default='0000000000', unique=True)
+
+    def __str__(self):
+        return self.name
