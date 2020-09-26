@@ -4,3 +4,4 @@ from kalamlabs import models
 
 admin.site.register(models.KalamRegistration)
 admin.site.register(models.BookAFreeTrial)
+admin.site.register(models.GeTInTouch)

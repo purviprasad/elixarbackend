@@ -11,3 +11,8 @@ class BookFreeTrialSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.BookAFreeTrial
         fields = '__all__'
+
+class GetInTouchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.GeTInTouch
+        fields = '__all__'

@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from rest_framework.views import APIView
+
+from django.core.mail import EmailMultiAlternatives
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import viewsets
@@ -33,6 +33,26 @@ class Register(viewsets.ModelViewSet):
             )
 
 
+class GetInTouch(viewsets.ModelViewSet):
+    serializer_class = serializers.GetInTouchSerializer
+    queryset = models.GeTInTouch.objects
+
+
+    def create(self,request):
+        data = request.data
+        serializer = self.serializer_class(data=data)
+
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+
+            return Response({'message': 'response saved'})
+        else:
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+
 
 class BookTrial(viewsets.ModelViewSet):
     serializer_class = serializers.BookFreeTrialSerializer
@@ -43,6 +63,7 @@ class BookTrial(viewsets.ModelViewSet):
         serializer = self.serializer_class(data=data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
+        send(data['name'], data['payment_amount'], data['order_id'])
         return Response({'message': True})
 
 
@@ -55,7 +76,7 @@ def payment(request):
         amount = data['amount']
         client = razorpay.Client(auth=("rzp_test_L3hv3powYQMGQn", "5QNSr9dG4LPu4IZ7c7rpnUM0"))
         order_id = client.order.create({'amount': amount, 'currency': 'INR', 'payment_capture': '1'})
-    return Response({"name": name,"order_id":order_id['id']})\
+    return Response({"name": name,"order_id":order_id['id']})
 
 
 
@@ -73,6 +94,23 @@ def verifySignature(request):
 
         client.utility.verify_payment_signature(params_dict)
     return Response({"message":True})
+
+@api_view(['GET','POSt'])
+
+def send(request):
+    data = request.data
+    name = data['name']
+    email = data['email']
+    amount = data['amount']
+    order_id = data['order_id']
+    subject, from_email, to = 'hello '+name, 'kalamlabs123@gmail.com', email
+    text_content = 'Congrats, For the Registration of kalam labs'
+    html_content = '<ul><li>Successful payment of'+amount+' </li>' \
+                   '<li>This is your order id'+order_id+'</li></ul>'
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
+    return Response({'message':'mail sent'})
 
 
 

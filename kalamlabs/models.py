@@ -35,3 +35,9 @@ class BookAFreeTrial(models.Model):
 
     def __str__(self):
         return self.name
+
+class GeTInTouch(models.Model):
+    email = models.EmailField(max_length=25, unique=True, default='NA')
+
+    def __str__(self):
+        return self.email
