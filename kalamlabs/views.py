@@ -1,5 +1,6 @@
-
+import os
 from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMessage
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import viewsets
@@ -101,12 +102,15 @@ def send(request):
     email = data['email']
     amount = data['amount']
     order_id = data['order_id']
-    subject, from_email, to = 'hello '+name, 'kalamlabs123@gmail.com', email
+    subject, from_email, to = 'Hello '+name, 'kalamlabs123@gmail.com', email
     text_content = 'Congrats, For the Registration of kalam labs'
-    html_content = '<ul><li>Successful payment of'+amount+' </li>' \
-                   '<li>This is your order id'+order_id+'</li></ul>'
-    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
-    msg.attach_alternative(html_content, "text/html")
+    html_content = '<p>Your journey aboard with Kalam Labs has Begun. We shall be sending you more details by 08:00 AM/PM. <p>Your payment of Rs 799/- is successful</p><p>Your Transaction ID is: '+order_id+'</p>'
+    msg = EmailMessage(subject, html_content, from_email, [to])
+    msg.content_subtype='html'
+    msg.attach_file('C:\elixirbackend\kalamlabs\kalamlabs.pdf')
+
+
+    # f.close()
     msg.send()
     return Response({'message':'mail sent'})
 
