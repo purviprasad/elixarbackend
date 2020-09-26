@@ -24,8 +24,7 @@ class Register(viewsets.ModelViewSet):
 
         if serializer.is_valid(raise_exception=True):
             serializer.save()
-            a = self.queryset.filter(mobile__exact=serializer.validated_data['mobile']).first()
-            return Response({'id': a.id})
+            return Response({'message': True})
         else:
             return Response(
                 serializer.errors,
@@ -73,7 +72,7 @@ def payment(request):
         data = request.data
         name = data['name']
         amount = data['amount']
-        client = razorpay.Client(auth=("rzp_test_L3hv3powYQMGQn", "5QNSr9dG4LPu4IZ7c7rpnUM0"))
+        client = razorpay.Client(auth=("rzp_live_0RdkjhtdlQnks7", "PBtCT5r7OVpJrEiV9QhQMMlH"))
         order_id = client.order.create({'amount': amount, 'currency': 'INR', 'payment_capture': '1'})
     return Response({"name": name,"order_id":order_id['id']})
 
@@ -84,7 +83,7 @@ def payment(request):
 def verifySignature(request):
     if (request.method == "POST"):
         data = request.data
-        client = razorpay.Client(auth=("rzp_test_L3hv3powYQMGQn", "5QNSr9dG4LPu4IZ7c7rpnUM0"))
+        client = razorpay.Client(auth=("rzp_live_0RdkjhtdlQnks7", "PBtCT5r7OVpJrEiV9QhQMMlH"))
         params_dict = {
             'razorpay_order_id': data['order_id'],
             'razorpay_payment_id': data['payment_id'],
