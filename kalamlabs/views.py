@@ -63,7 +63,6 @@ class BookTrial(viewsets.ModelViewSet):
         serializer = self.serializer_class(data=data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
-        send(data['name'], data['payment_amount'], data['order_id'])
         return Response({'message': True})
 
 
